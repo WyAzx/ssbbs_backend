@@ -36,3 +36,11 @@ class WeChatConnectError(CustomAPIException):
             'message': detail,
             'code': 3001
         }
+
+
+class VerifyCodeError(CustomAPIException):
+    def __init__(self, detail=None):
+        self.detail = {
+            'message': detail,
+            'code': 3010
+        }

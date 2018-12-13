@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.template import loader
 
 from account.models import SsUserCode
+from exception.exceptions import VerifyCodeError
 from utils.common import get_random_code, get_random_verify_code, get_verify_email_key
 from utils.redis_client import get_redis_client
 
@@ -47,3 +48,12 @@ def send_verify_email(email):
     except Exception as e:
         LOG.exception(e)
 
+
+def verify_code(verify_code_key, input_code):
+    redis_db = get_redis_client()
+    if redis_db.exists(verify_code_key):
+        code = redis_db.get(verify_code_key)
+        if not code or code != input_code:
+            raise VerifyCodeError(detail='wrong verify code!')
+    else:
+        raise VerifyCodeError(detail='verify code expired!')

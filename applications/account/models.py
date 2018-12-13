@@ -1,5 +1,9 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+
+
+class UserManager(BaseUserManager):
+    pass
 
 
 class SsUser(AbstractBaseUser):
@@ -26,6 +30,9 @@ class SsUser(AbstractBaseUser):
     wechat_avatar = models.CharField(max_length=256, blank=True, null=True)
 
     USERNAME_FIELD = 'user_name'
+
+    objects = UserManager()
+
 
     @property
     def is_active(self):

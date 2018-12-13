@@ -7,12 +7,12 @@ from account.verify import UserInfoUpdateVerify
 
 
 class UserInfoView(APIView):
-    def get(self):
+    def get(self, request):
         serializer = UserDetailSerializer(self.request.user)
         user_data = serializer.data
         return Response({'code': 0, 'data': user_data})
 
-    def post(self):
+    def post(self, request):
         verify = UserInfoUpdateVerify(data=self.request.data)
         data = get_update_data(verify.data)
         if len(data) == 0:

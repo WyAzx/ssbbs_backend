@@ -195,3 +195,14 @@ WECHAT_CONFIG = {
     'app_secret': os.environ.get('APP_SECRET'),
     'jscode2session_url': 'https://api.weixin.qq.com/sns/jscode2session',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.pku.edu.cn'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'wangyunazx@pku.edu.cn'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PWD')
+EMAIL_USE_SSL = True
+EMAIL_FROM = 'PKUSS BBS'
+
+
+VERIFY_CODE_EXPIRE = 5 * 60

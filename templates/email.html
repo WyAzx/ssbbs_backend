@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+  .container div .weight{
+    font-weight: 600;
+  }
+  a{
+    text-decoration: none;
+  }
+  .container{
+    box-sizing: border-box;
+    height: 361px;
+    width: 470px;
+    padding: 37px;
+  }
+  .container div{
+    font-family: PingFangSC;
+    font-size: 14px;
+    letter-spacing: -0.1px;
+    text-align: left;
+    color: #111112;
+  }
+  .container div.bottom{
+    font-family: PingFangSC;
+    font-size: 12px;
+    letter-spacing: -0.1px;
+    text-align: left;
+    color: #919daa;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <p>您的邮箱是：<span class="weight">{{ address }}</span></p>
+        <p>您的验证码是：<span class="weight">{{ verify_code }}</span></p>
+      </div>
+    </div>
+    <div class="bottom">
+        请注意，该电子邮件地址不接受回复邮件，要解决问题或了解您的账户详情，请联系wangyunazx@pku.edu.cn。
+    </div>
+  </div>
+</body>
+</html>

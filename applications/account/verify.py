@@ -41,3 +41,12 @@ class VerifyCodeVerify(ParamVerify):
         else:
             raise ParamIllegalError(key="type")
         return data
+
+
+class UserInfoUpdateVerify(ParamVerify):
+    password = serializers.CharField(allow_null=True, max_length=16)
+    user_name = serializers.CharField(allow_null=True, max_length=32)
+    nick_name = serializers.CharField(allow_null=True, max_length=32)
+    birthday = serializers.DateField(allow_null=True)
+    gender = serializers.IntegerField(allow_null=True)
+    description = serializers.CharField(allow_null=True, max_length=256)

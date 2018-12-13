@@ -167,4 +167,6 @@ fabric.properties
 .idea/httpRequests
 
 deploy.sh
+environment.json
 
+.idea/inspectionProfiles/

@@ -19,6 +19,17 @@ class UserDetailSerializer(serializers.ModelSerializer):
         #     data['avatar'] = get_avatar_url(data['avatar'])
         return data
 
+    def update(self, instance, validated_data):
+        password = validated_data.get('password', None)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+        return instance
+
     class Meta:
         model = SsUser
         fields = '__all__'

@@ -6,8 +6,9 @@ from django.template import loader
 
 from account.models import SsUserCode
 from exception.exceptions import VerifyCodeError
-from utils.common import get_random_code, get_random_verify_code, get_verify_email_key
+from utils.common import get_random_code, get_random_verify_code, get_verify_email_key, get_verify_phone_key
 from utils.redis_client import get_redis_client
+from utils.sms_client import ZhenziSmsClient
 
 LOG = logging.getLogger(__name__)
 
@@ -25,13 +26,28 @@ def get_random_user_name():
             return 'ss.{}'.format(user_code)
 
 
+def send_verify_sms(phone):
+    code = get_random_verify_code()
+    verify_code_key = get_verify_phone_key(phone)
+    redis_db = get_redis_client()
+
+    # cache verify code
+    redis_db.set(verify_code_key, code)
+    redis_db.expire(verify_code_key, settings.VERIFY_CODE_EXPIRE)
+    sms_config = settings.SMS_CONFIG
+    client = ZhenziSmsClient(sms_config.get('api_url'), sms_config.get('app_id'), sms_config.get('app_secret'))
+
+    res = client.send(phone, '【SSPKUBBS】您的验证码为:{},五分钟之内失效，请妥善保管～'.format(code))
+    return res
+
+
 def send_verify_email(email):
-    verify_code = get_random_verify_code()
+    code = get_random_verify_code()
     verify_code_key = get_verify_email_key(email)
     redis_db = get_redis_client()
 
     # cache verify code
-    redis_db.set(verify_code_key, verify_code)
+    redis_db.set(verify_code_key, code)
     redis_db.expire(verify_code_key, settings.VERIFY_CODE_EXPIRE)
 
     title = 'SSPKU论坛验证'
@@ -39,7 +55,7 @@ def send_verify_email(email):
         'email.html',
         {
             'address': email,
-            'verify_code': verify_code
+            'verify_code': code
         }
     )
     try:

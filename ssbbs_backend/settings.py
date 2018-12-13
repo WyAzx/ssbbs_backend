@@ -204,5 +204,11 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PWD')
 EMAIL_USE_SSL = True
 EMAIL_FROM = 'PKUSS BBS'
 
+SMS_CONFIG = {
+    "api_url": "http://sms_developer.zhenzikj.com",
+    "app_id": "100303",
+    "app_secret": "928e8c85-fab9-4bb2-9b7f-1be0d26ba8f1",
+}
+
 
 VERIFY_CODE_EXPIRE = 5 * 60

@@ -9,7 +9,7 @@ class CustomAPIException(APIException):
 class ParamMissError(CustomAPIException):
     def __init__(self, key=None, detail=None):
         self.detail = {
-            'message': detail if detail else _('%(key)s: This field is required.') % {'key': key},
+            'message': detail if detail else '%(key)s: This field is required.' % {'key': key},
             'code': 1001
         }
 
@@ -17,7 +17,7 @@ class ParamMissError(CustomAPIException):
 class ParamIllegalError(CustomAPIException):
     def __init__(self, key=None, detail=None):
         self.detail = {
-            'message': detail if detail else _('%(key)s: Param illegal.') % {'key': key},
+            'message': detail if detail else '%(key)s: Param illegal.' % {'key': key},
             'code': 1002
         }
 
@@ -25,8 +25,16 @@ class ParamIllegalError(CustomAPIException):
 class UserNotExistError(CustomAPIException):
     def __init__(self, detail=None):
         self.detail = {
-            'message': detail if detail else _("User doesn't exist!"),
+            'message': detail if detail else "User doesn't exist!",
             'code': 2001
+        }
+
+
+class PasswordWrongError(CustomAPIException):
+    def __init__(self, detail=None):
+        self.detail = {
+            'message': detail if detail else "wrong password",
+            'code': 2002
         }
 
 
@@ -43,4 +51,12 @@ class VerifyCodeError(CustomAPIException):
         self.detail = {
             'message': detail,
             'code': 3010
+        }
+
+
+class UserInfoUpdateError(CustomAPIException):
+    def __init__(self, detail=None):
+        self.detail = {
+            'message': detail,
+            'code': 3100
         }

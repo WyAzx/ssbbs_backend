@@ -6,7 +6,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import empty
 
-from exception.exceptions import ParamMissError, ParamIllegalError
+from account.models import SsUser
+from exception.exceptions import ParamMissError, ParamIllegalError, UserInfoUpdateError
 
 LOG = logging.getLogger(__name__)
 
@@ -48,5 +49,11 @@ class UserInfoUpdateVerify(ParamVerify):
     user_name = serializers.CharField(allow_null=True, max_length=32)
     nick_name = serializers.CharField(allow_null=True, max_length=32)
     birthday = serializers.DateField(allow_null=True)
-    gender = serializers.IntegerField(allow_null=True)
+    gender = serializers.IntegerField(allow_null=True, min_value=0, max_value=2)
     description = serializers.CharField(allow_null=True, max_length=256)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        user_name = data.get('user_name')
+        if SsUser.objects.get(user_name=user_name):
+            raise UserInfoUpdateError(detail='user name has existed')

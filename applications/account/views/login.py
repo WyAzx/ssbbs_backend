@@ -1,5 +1,6 @@
 import logging
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,6 +8,7 @@ from rest_framework_jwt.settings import api_settings
 
 from account.models import SsUser
 from account.serializers import UserDetailSerializer
+from exception.exceptions import UserNotExistError, PasswordWrongError
 from utils.common import get_random_id, get_verify_phone_key, get_verify_email_key
 from utils.send_requests import get_wechat_openid
 from utils.shortcuts import get_random_user_name, verify_code
@@ -57,6 +59,26 @@ class LoginView(APIView):
             user, ok = SsUser.objects.get_or_create(
                 defaults={'id': user_id, 'user_name': user_name},
                 email=email)
+
+        elif login_type == '3':
+            phone = request.data.get('phone')
+            password = request.data.get('password')
+            try:
+                user = SsUser.objects.get(phone=phone)
+            except ObjectDoesNotExist:
+                raise UserNotExistError()
+            if not user.check_password(password):
+                raise PasswordWrongError()
+
+        elif login_type == '4':
+            email = request.data.get('email')
+            password = request.data.get('password')
+            try:
+                user = SsUser.objects.get(email=email)
+            except ObjectDoesNotExist:
+                raise UserNotExistError()
+            if not user.check_password(password):
+                raise PasswordWrongError()
 
         else:
             return Response({'msg': 'wrong_type', 'code': 801})

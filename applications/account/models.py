@@ -33,7 +33,6 @@ class SsUser(AbstractBaseUser):
 
     objects = UserManager()
 
-
     @property
     def is_active(self):
         return self.role != -1

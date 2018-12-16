@@ -57,3 +57,21 @@ class UserInfoUpdateVerify(ParamVerify):
         user_name = data.get('user_name')
         if SsUser.objects.get(user_name=user_name):
             raise UserInfoUpdateError(detail='user name has existed')
+
+
+class AvatarUploadVerify(ParamVerify):
+    avatar = serializers.ListField()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        avatars = data.get('avatar')
+        data['avatar'] = avatars[0]
+        return data
+
+    def validate(self, data):
+        avatars = data.get('avatar')
+        if avatars is None:
+            raise ParamMissError(key="avatar")
+        if len(avatars) != 1:
+            raise ParamIllegalError(key="avatar")
+        return data
